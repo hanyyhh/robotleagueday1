@@ -246,4 +246,93 @@ document.addEventListener("DOMContentLoaded", function(){
     else {teamA.draws++; teamB.draws++; teamA.points++; teamB.points++;}
 
     // Add history
-    teamA
+    teamA.history.push({date:"2026-03-07", opponent:r.teamB, result:r.scoreA>r.scoreB?"W":(r.scoreA<r.scoreB?"L":"D"), score:`${r.scoreA}-${r.scoreB}`});
+    teamB.history.push({date:"2026-03-07", opponent:r.teamA, result:r.scoreB>r.scoreA?"W":(r.scoreB<r.scoreA?"L":"D"), score:`${r.scoreB}-${r.scoreA}`});
+  });
+
+  // Sort teams by points, gd, gf
+  teams.sort((a,b)=>{
+    if(b.points!==a.points) return b.points-a.points;
+    if(b.gd!==a.gd) return b.gd-a.gd;
+    return b.gf-a.gf;
+  });
+
+  // Populate Standings
+  const standings = document.getElementById("standings");
+  standings.innerHTML="";
+  teams.forEach((t,i)=>{
+    const tr=document.createElement("tr");
+    if(i===0) tr.classList.add("rank1");
+    else if(i===1) tr.classList.add("rank2");
+    else if(i===2) tr.classList.add("rank3");
+
+    tr.innerHTML=`<td>${i+1}</td>
+    <td>${t.name}</td>
+    <td>${t.played}</td>
+    <td>${t.wins}</td>
+    <td>${t.draws}</td>
+    <td>${t.losses}</td>
+    <td>${t.points}</td>
+    <td>${t.gd}</td>
+    <td>${t.gf}</td>
+    <td>${t.ga}</td>`;
+    
+    tr.onclick=()=>showTeam(t);
+    standings.appendChild(tr);
+  });
+
+  // Populate matches
+  const matches = document.getElementById("matches");
+  matches.innerHTML="";
+  schedule.forEach((m,i)=>{
+    const tr=document.createElement("tr");
+    tr.innerHTML=`<td>${i+1}</td><td>${m[1]}</td><td>${m[2]}</td><td>${m[0]}</td>`;
+    matches.appendChild(tr);
+  });
+
+  // Highlight next match
+  function highlightNextMatch(){
+    const today = new Date();
+    matches.querySelectorAll("tr").forEach(tr=>tr.classList.remove("next-match"));
+    for(let tr of matches.querySelectorAll("tr")){
+      const dateStr = tr.children[3].textContent;
+      const parts = dateStr.split("-");
+      const matchDate = new Date(parts[0], parts[1]-1, parts[2], 10,0,0);
+      if(matchDate >= today){
+        tr.classList.add("next-match");
+        break;
+      }
+    }
+  }
+
+  highlightNextMatch();
+  setInterval(highlightNextMatch,60000);
+
+  // Show Team Modal
+  function showTeam(team){
+    document.getElementById("teamTitle").textContent=team.name;
+    const members=document.getElementById("members");
+    members.innerHTML="";
+    team.members.forEach(m=>{
+      const li=document.createElement("li");
+      li.textContent=m;
+      members.appendChild(li);
+    });
+    document.getElementById("performanceText").textContent=
+      `Wins: ${team.wins}, Draws: ${team.draws}, Losses: ${team.losses}, GF: ${team.gf}, GA: ${team.ga}`;
+
+    const history=document.getElementById("history");
+    history.innerHTML="";
+    team.history.forEach(h=>{
+      const tr=document.createElement("tr");
+      tr.innerHTML=`<td>${h.date}</td><td>${h.opponent}</td><td>${h.result}</td><td>${h.score}</td>`;
+      history.appendChild(tr);
+    });
+
+    new bootstrap.Modal(document.getElementById("teamModal")).show();
+  }
+
+});
+</script>
+</body>
+</html>
