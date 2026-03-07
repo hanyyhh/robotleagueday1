@@ -85,23 +85,6 @@ tbody tr:hover{
 .rank2 td{color:#c0c0c0; text-shadow:0 0 12px silver;}
 .rank3 td{color:#cd7f32; text-shadow:0 0 12px #cd7f32;}
 
-.matches-table td{
-  transition:0.3s all;
-}
-
-.matches-table tr:hover td{
-  background:#1e293b;
-  color:#60a5fa;
-  text-shadow:0 0 8px #3b82f6;
-}
-
-.next-match td{
-  background:#1e3a8a;
-  color:#60a5fa;
-  font-weight:bold;
-  text-shadow:0 0 8px #3b82f6;
-}
-
 .modal-header{
   background:#1e40af;
   color:white;
@@ -138,16 +121,6 @@ tbody tr:hover{
 </tr>
 </thead>
 <tbody id="standings"></tbody>
-</table>
-
-<h2>Match Schedule</h2>
-<table class="matches-table">
-<thead>
-<tr>
-<th>#</th><th>Team A</th><th>Team B</th><th>Day</th>
-</tr>
-</thead>
-<tbody id="matches"></tbody>
 </table>
 
 </main>
@@ -204,7 +177,7 @@ const teams = [
 {name:"Team 18", members:["Amine essalhi","Safa tarmoun","yassine hatana","Hafsa kadmi","Soufiane labrag","Aya El_frouni"], history:[], played:0, wins:0, draws:0, losses:0, points:0, gf:0, ga:0, gd:0}
 ];
 
-// Day 1 results
+// Apply Day 1 results to teams
 const resultsDay1 = [
   {teamA:"Team 1", teamB:"Team 16", scoreA:0, scoreB:4},
   {teamA:"Team 2", teamB:"Team 15", scoreA:2, scoreB:0},
@@ -217,42 +190,21 @@ const resultsDay1 = [
   {teamA:"Team 18", teamB:"Team 11", scoreA:0, scoreB:4}
 ];
 
-// Schedule (Days 1–6) using Day numbers
-const schedule = [
-  ["Day 1","Team 1","Team 16"],["Day 1","Team 2","Team 15"],["Day 1","Team 3","Team 14"],["Day 1","Team 4","Team 13"],
-  ["Day 1","Team 5","Team 12"],["Day 1","Team 6","Team 17"],["Day 1","Team 7","Team 10"],["Day 1","Team 8","Team 9"],["Day 1","Team 18","Team 11"],
-  ["Day 2","Team 1","Team 15"],["Day 2","Team 16","Team 14"],["Day 2","Team 18","Team 13"],["Day 2","Team 3","Team 12"],["Day 2","Team 4","Team 11"],
-  ["Day 2","Team 5","Team 10"],["Day 2","Team 6","Team 9"],["Day 2","Team 7","Team 8"],["Day 2","Team 17","Team 2"],
-  ["Day 3","Team 1","Team 11"],["Day 3","Team 12","Team 10"],["Day 3","Team 18","Team 9"],["Day 3","Team 14","Team 8"],["Day 3","Team 15","Team 7"],
-  ["Day 3","Team 16","Team 6"],["Day 3","Team 2","Team 5"],["Day 3","Team 3","Team 4"],["Day 3","Team 13","Team 17"],
-  ["Day 4","Team 1","Team 14"],["Day 4","Team 15","Team 13"],["Day 4","Team 16","Team 12"],["Day 4","Team 2","Team 11"],["Day 4","Team 3","Team 10"],
-  ["Day 4","Team 4","Team 9"],["Day 4","Team 5","Team 8"],["Day 4","Team 6","Team 7"],["Day 4","Team 17","Team 18"],
-  ["Day 5","Team 1","Team 18"],["Day 5","Team 13","Team 11"],["Day 5","Team 14","Team 10"],["Day 5","Team 15","Team 9"],["Day 5","Team 16","Team 8"],
-  ["Day 5","Team 2","Team 7"],["Day 5","Team 3","Team 6"],["Day 5","Team 4","Team 5"],["Day 5","Team 12","Team 17"],
-  ["Day 6","Team 1","Team 13"],["Day 6","Team 14","Team 12"],["Day 6","Team 15","Team 11"],["Day 6","Team 16","Team 10"],["Day 6","Team 2","Team 9"],
-  ["Day 6","Team 3","Team 8"],["Day 6","Team 4","Team 7"],["Day 6","Team 5","Team 17"],["Day 6","Team 6","Team 18"]
-];
-
-// Apply Day 1 results to teams
+// Update standings based on Day 1
 resultsDay1.forEach(r=>{
   const teamA = teams.find(t=>t.name===r.teamA);
   const teamB = teams.find(t=>t.name===r.teamB);
 
-  // Update played
   teamA.played++; teamB.played++;
-
-  // Update goals
   teamA.gf += r.scoreA; teamA.ga += r.scoreB;
   teamB.gf += r.scoreB; teamB.ga += r.scoreA;
   teamA.gd = teamA.gf - teamA.ga;
   teamB.gd = teamB.gf - teamB.ga;
 
-  // Update wins/draws/losses
   if(r.scoreA>r.scoreB){ teamA.wins++; teamB.losses++; teamA.points+=3; }
   else if(r.scoreA<r.scoreB){ teamB.wins++; teamA.losses++; teamB.points+=3; }
   else{ teamA.draws++; teamB.draws++; teamA.points++; teamB.points++; }
 
-  // Update history
   teamA.history.push({day:"Day 1", opponent:r.teamB, result:r.scoreA>r.scoreB?"W":(r.scoreA<r.scoreB?"L":"D"), score:`${r.scoreA}-${r.scoreB}`});
   teamB.history.push({day:"Day 1", opponent:r.teamA, result:r.scoreB>r.scoreA?"W":(r.scoreB<r.scoreA?"L":"D"), score:`${r.scoreB}-${r.scoreA}`});
 });
@@ -275,15 +227,6 @@ teams.forEach((t,i)=>{
   tr.innerHTML=`<td>${i+1}</td><td>${t.name}</td><td>${t.played}</td><td>${t.wins}</td><td>${t.draws}</td><td>${t.losses}</td><td>${t.points}</td><td>${t.gd}</td><td>${t.gf}</td><td>${t.ga}</td>`;
   tr.onclick=()=>showTeam(t);
   standings.appendChild(tr);
-});
-
-// Populate matches table
-const matchesEl = document.getElementById("matches");
-matchesEl.innerHTML="";
-schedule.forEach((m,i)=>{
-  const tr=document.createElement("tr");
-  tr.innerHTML=`<td>${i+1}</td><td>${m[1]}</td><td>${m[2]}</td><td>${m[0]}</td>`;
-  matchesEl.appendChild(tr);
 });
 
 // Show Team Modal
