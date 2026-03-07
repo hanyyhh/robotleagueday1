@@ -269,8 +269,34 @@ function updateStandings(results){
 updateStandings(day1Results);
 populateStandings();
 
-// Match schedule (same as before, include all days)
-const schedule=[ /* your full schedule day 1-6 */ ];
+// Full Match Schedule Days 1-6
+const schedule=[
+  ["2026-03-07","Team 1","Team 16"],["2026-03-07","Team 2","Team 15"],["2026-03-07","Team 3","Team 14"],
+  ["2026-03-07","Team 4","Team 13"],["2026-03-07","Team 5","Team 12"],["2026-03-07","Team 6","Team 17"],
+  ["2026-03-07","Team 7","Team 10"],["2026-03-07","Team 8","Team 9"],["2026-03-07","Team 18","Team 11"],
+
+  ["2026-03-08","Team 1","Team 15"],["2026-03-08","Team 16","Team 14"],["2026-03-08","Team 18","Team 13"],
+  ["2026-03-08","Team 3","Team 12"],["2026-03-08","Team 4","Team 11"],["2026-03-08","Team 5","Team 10"],
+  ["2026-03-08","Team 6","Team 9"],["2026-03-08","Team 7","Team 8"],["2026-03-08","Team 17","Team 2"],
+
+  ["2026-03-09","Team 1","Team 11"],["2026-03-09","Team 12","Team 10"],["2026-03-09","Team 18","Team 9"],
+  ["2026-03-09","Team 14","Team 8"],["2026-03-09","Team 15","Team 7"],["2026-03-09","Team 16","Team 6"],
+  ["2026-03-09","Team 2","Team 5"],["2026-03-09","Team 3","Team 4"],["2026-03-09","Team 13","Team 17"],
+
+  ["2026-03-10","Team 1","Team 14"],["2026-03-10","Team 15","Team 13"],["2026-03-10","Team 16","Team 12"],
+  ["2026-03-10","Team 2","Team 11"],["2026-03-10","Team 3","Team 10"],["2026-03-10","Team 4","Team 9"],
+  ["2026-03-10","Team 5","Team 8"],["2026-03-10","Team 6","Team 7"],["2026-03-10","Team 17","Team 18"],
+
+  ["2026-03-11","Team 1","Team 18"],["2026-03-11","Team 13","Team 11"],["2026-03-11","Team 14","Team 10"],
+  ["2026-03-11","Team 15","Team 9"],["2026-03-11","Team 16","Team 8"],["2026-03-11","Team 2","Team 7"],
+  ["2026-03-11","Team 3","Team 6"],["2026-03-11","Team 4","Team 5"],["2026-03-11","Team 12","Team 17"],
+
+  ["2026-03-12","Team 1","Team 13"],["2026-03-12","Team 14","Team 12"],["2026-03-12","Team 15","Team 11"],
+  ["2026-03-12","Team 16","Team 10"],["2026-03-12","Team 2","Team 9"],["2026-03-12","Team 3","Team 8"],
+  ["2026-03-12","Team 4","Team 7"],["2026-03-12","Team 5","Team 17"],["2026-03-12","Team 6","Team 18"]
+];
+
+// Populate matches table
 const matches=document.getElementById("matches");
 schedule.forEach((m,i)=>{
   const tr=document.createElement("tr");
@@ -285,7 +311,10 @@ function highlightNextMatch(){
   for(let tr of matches.querySelectorAll("tr")){
     const dateStr=tr.children[3].textContent;
     const matchDate=new Date(dateStr+"T10:00");
-    if(matchDate >= today){ tr.classList.add("next-match"); break; }
+    if(matchDate >= today){
+      tr.classList.add("next-match");
+      break;
+    }
   }
 }
 highlightNextMatch();
@@ -302,7 +331,7 @@ function showTeam(team){
     members.appendChild(li);
   });
   document.getElementById("performanceText").textContent=
-    `Wins: ${team.wins}, Draws: ${team.draws}, Losses: ${team.losses}`;
+    `Wins: ${team.wins}, Draws: ${team.draws}, Losses: ${team.losses}, GF: ${team.gf}, GA: ${team.ga}`;
 
   const history=document.getElementById("history");
   history.innerHTML="";
