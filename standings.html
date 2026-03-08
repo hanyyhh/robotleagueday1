@@ -39,7 +39,7 @@ header h1{
 }
 
 main{
-  max-width:1100px;
+  max-width:1200px;
   margin:auto;
   padding:20px;
 }
@@ -67,12 +67,10 @@ tbody td{
   padding:8px;
   text-align:center;
   border-bottom:1px solid #1e3a8a;
-  transition:0.3s all;
 }
 
 tbody tr{
   cursor:pointer;
-  transition:0.3s all;
 }
 
 tbody tr:hover{
@@ -81,9 +79,9 @@ tbody tr:hover{
   text-shadow:0 0 8px #3b82f6;
 }
 
-.rank1 td{color:#ffd700; text-shadow:0 0 15px gold;}
-.rank2 td{color:#c0c0c0; text-shadow:0 0 12px silver;}
-.rank3 td{color:#cd7f32; text-shadow:0 0 12px #cd7f32;}
+.rank1 td{color:#ffd700;}
+.rank2 td{color:#c0c0c0;}
+.rank3 td{color:#cd7f32;}
 
 .modal-header{
   background:#1e40af;
@@ -93,14 +91,6 @@ tbody tr:hover{
 .modal-table th{
   background:#0f172a;
   color:#3b82f6;
-  text-align:center;
-  border-bottom:1px solid #3b82f6;
-}
-
-.modal-table td{
-  text-align:center;
-  padding:8px 0;
-  border-bottom:1px solid #1e40af;
 }
 </style>
 </head>
@@ -125,7 +115,6 @@ tbody tr:hover{
 
 </main>
 
-<!-- Team Modal -->
 <div class="modal fade" id="teamModal">
 <div class="modal-dialog modal-lg modal-dialog-centered">
 <div class="modal-content bg-dark text-light">
@@ -133,7 +122,9 @@ tbody tr:hover{
 <h5 class="modal-title" id="teamTitle"></h5>
 <button class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
 </div>
+
 <div class="modal-body">
+
 <h5>Members</h5>
 <ul id="members"></ul>
 
@@ -141,101 +132,113 @@ tbody tr:hover{
 <p id="performanceText"></p>
 
 <h5>Match History</h5>
+
 <table class="table table-dark modal-table">
 <thead>
 <tr>
-<th>Day</th><th>Opponent</th><th>Result</th><th>Score</th>
+<th>Date</th>
+<th>Opponent</th>
+<th>Result</th>
+<th>Score</th>
 </tr>
 </thead>
 <tbody id="history"></tbody>
 </table>
+
 </div>
 </div>
 </div>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
 
+// Teams
 const teams = [
-{name:"Team 1",members:["Soufiane selmani","Fatimezzhra ait bahanni","Bouyadmar adam","Nabil sebbar","Allali mariam","Alae ahrour"],history:[],played:0,wins:0,draws:0,losses:0,points:0,gf:0,ga:0,gd:0},
-{name:"Team 2",members:["Achraf Akhtar","ABDELILAH ALLOUT","Safae Essaib","Aimad Ait Ouarkhane","Ibrahim DJI","Cherkaoui Faris"],history:[],played:0,wins:0,draws:0,losses:0,points:0,gf:0,ga:0,gd:0},
-{name:"Team 3",members:["Khalifa Mohamed khaifa","Hiba er-roufi","Amina boubghi","Omar bouya","Hajar touarane","Yassine Hatana","Hajar Nadi"],history:[],played:0,wins:0,draws:0,losses:0,points:0,gf:0,ga:0,gd:0},
-{name:"Team 4",members:["Mohamed Ayman Roukhsi","Ismail el faouzi","maryeme hibatallah","Lachhab mohamed","marwa benhouad","Zineb Boussaq","Douaa machehour"],history:[],played:0,wins:0,draws:0,losses:0,points:0,gf:0,ga:0,gd:0},
-{name:"Team 5",members:["Oussama hrioued","Lemsyah majda","Basma naddari","Daaraoui Kenza","Daif hajar","Yasser Boulaajoul","Lina Elksabi"],history:[],played:0,wins:0,draws:0,losses:0,points:0,gf:0,ga:0,gd:0},
-{name:"Team 6",members:["Leila manssouri azzouzi","Yassine Bekkali","mouad archkak","Bournakhla mohammed","Chaimae Gannaoui","Kada fatima zohra","Yasmine hamsane"],history:[],played:0,wins:0,draws:0,losses:0,points:0,gf:0,ga:0,gd:0},
-{name:"Team 7",members:["Jou hamza","IHSSANE ELAABOUS","Doha zouahri","AGZAL ADAM","Fatima zzahra Hamzaoui","Aya boutaleb"],history:[],played:0,wins:0,draws:0,losses:0,points:0,gf:0,ga:0,gd:0},
-{name:"Team 8",members:["Ayoub hammamoun","Olaya benmimoune","mouad messaoudi","HAMZA NACIRI","Safae ELABDELLAOUI","Aoussam Nezha","racha benhamou"],history:[],played:0,wins:0,draws:0,losses:0,points:0,gf:0,ga:0,gd:0},
-{name:"Team 9",members:["Samir Sabri","Walid Mouthar","Douae Lamuoal","Azzam meriem","nid haddou youssef","Ilyas el khairi"],history:[],played:0,wins:0,draws:0,losses:0,points:0,gf:0,ga:0,gd:0},
-{name:"Team 10",members:["Moad ait ali oubrahim","Tourab Soukaina","Mahra hlalou","EL MARKADI Hajar","Hamza belkhadir","Ismail joubair","mohamed ammar"],history:[],played:0,wins:0,draws:0,losses:0,points:0,gf:0,ga:0,gd:0},
-{name:"Team 11",members:["ilyas el kabrane","Karim anas ellaiti","El kouri Manal","Aya ibn el ouasyl","Belharba aya","Mouna Benhmimou","DAHIMI Sanae"],history:[],played:0,wins:0,draws:0,losses:0,points:0,gf:0,ga:0,gd:0},
-{name:"Team 12",members:["Adam el baroudi","Maha Hafdi","Alae eddine bouryal","Hajar El Harradi","Tasnime slimani","Razouki khadija","Ettalhi chaimae"],history:[],played:0,wins:0,draws:0,losses:0,points:0,gf:0,ga:0,gd:0},
-{name:"Team 13",members:["hani ez zhar","Ahmed Samir maqdissi","Ismail Sabir","Doha faih","salah eddin harouache","Zarghoune Islam"],history:[],played:0,wins:0,draws:0,losses:0,points:0,gf:0,ga:0,gd:0},
-{name:"Team 14",members:["TAHA EL GHASSEL","Mohamed yassine elkhatibi","Douhaoui Douae","Bertal sara","Imane abidar","Hossine brital"],history:[],played:0,wins:0,draws:0,losses:0,points:0,gf:0,ga:0,gd:0},
-{name:"Team 15",members:["Youssef Yadini","Oussama ID LAASRI","Hafssa Mahjoub","Belokda houda","Nour EL hajji","Hanane boukassal"],history:[],played:0,wins:0,draws:0,losses:0,points:0,gf:0,ga:0,gd:0},
-{name:"Team 16",members:["Belghazi Basma","Tarmoun marwa","Yahya litim","Bouchra Balaje","Aoussam Rania","Abderrahmane ait mansour","Soukaina benzaddou"],history:[],played:0,wins:0,draws:0,losses:0,points:0,gf:0,ga:0,gd:0},
-{name:"Team 17",members:["Yasser Yjjou","Nissrine el haini","Fath-allah amine","Soufiane chlieh","Zayneb Richard","soumia BEN-FARES"],history:[],played:0,wins:0,draws:0,losses:0,points:0,gf:0,ga:0,gd:0},
-{name:"Team 18",members:["Amine essalhi","Safa tarmoun","yassine hatana","Hafsa kadmi","Soufiane labrag","Aya El_frouni"],history:[],played:0,wins:0,draws:0,losses:0,points:0,gf:0,ga:0,gd:0}
+{name:"Team 1",played:0,wins:0,draws:0,losses:0,points:0,gd:0,gf:0,ga:0,members:["Soufiane selmani","Fatimezzhra ait bahanni","Bouyadmar adam","Nabil sebbar","Allali mariam","Alae ahrour"],history:[]},
+{name:"Team 2",played:0,wins:0,draws:0,losses:0,points:0,gd:0,gf:0,ga:0,members:["Achraf Akhtar","ABDELILAH ALLOUT","Safae Essaib","Aimad Ait Ouarkhane","Ibrahim DJI","Cherkaoui Faris"],history:[]},
+{name:"Team 3",played:0,wins:0,draws:0,losses:0,points:0,gd:0,gf:0,ga:0,members:["Khalifa Mohamed khaifa","Hiba er-roufi","Amina boubghi","Omar bouya","Hajar touarane","Yassine Hatana","Hajar Nadi"],history:[]},
+{name:"Team 4",played:0,wins:0,draws:0,losses:0,points:0,gd:0,gf:0,ga:0,members:["Mohamed Ayman Roukhsi","Ismail el faouzi","maryeme hibatallah","Lachhab mohamed","marwa benhouad","Zineb Boussaq","Douaa machehour"],history:[]},
+{name:"Team 5",played:0,wins:0,draws:0,losses:0,points:0,gd:0,gf:0,ga:0,members:["Oussama hrioued","Lemsyah majda","Basma naddari","Daaraoui Kenza","Daif hajar","Yasser Boulaajoul","Lina Elksabi"],history:[]},
+{name:"Team 6",played:0,wins:0,draws:0,losses:0,points:0,gd:0,gf:0,ga:0,members:["Leila manssouri azzouzi","Yassine Bekkali","mouad archkak","Bournakhla mohammed","Chaimae Gannaoui","Kada fatima zohra","Yasmine hamsane"],history:[]},
+{name:"Team 7",played:0,wins:0,draws:0,losses:0,points:0,gd:0,gf:0,ga:0,members:["Jou hamza","IHSSANE ELAABOUS","Doha zouahri","AGZAL ADAM","Fatima zzahra Hamzaoui","Aya boutaleb"],history:[]},
+{name:"Team 8",played:0,wins:0,draws:0,losses:0,points:0,gd:0,gf:0,ga:0,members:["Ayoub hammamoun","Olaya benmimoune","mouad messaoudi","HAMZA NACIRI","Safae ELABDELLAOUI","Aoussam Nezha","racha benhamou"],history:[]},
+{name:"Team 9",played:0,wins:0,draws:0,losses:0,points:0,gd:0,gf:0,ga:0,members:["Samir Sabri","Walid Mouthar","Douae Lamuoal","Azzam meriem","nid haddou youssef","Ilyas el khairi"],history:[]},
+{name:"Team 10",played:0,wins:0,draws:0,losses:0,points:0,gd:0,gf:0,ga:0,members:["Moad ait ali oubrahim","Tourab Soukaina","Mahra hlalou","EL MARKADI Hajar","Hamza belkhadir","Ismail joubair","mohamed ammar"],history:[]},
+{name:"Team 11",played:0,wins:0,draws:0,losses:0,points:0,gd:0,gf:0,ga:0,members:["ilyas el kabrane","Karim anas ellaiti","El kouri Manal","Aya ibn el ouasyl","Belharba aya","Mouna Benhmimou","DAHIMI Sanae"],history:[]},
+{name:"Team 12",played:0,wins:0,draws:0,losses:0,points:0,gd:0,gf:0,ga:0,members:["Adam el baroudi","Maha Hafdi","Alae eddine bouryal","Hajar El Harradi","Tasnime slimani","Razouki khadija","Ettalhi chaimae"],history:[]},
+{name:"Team 13",played:0,wins:0,draws:0,losses:0,points:0,gd:0,gf:0,ga:0,members:["hani ez zhar","Ahmed Samir maqdissi","Ismail Sabir","Doha faih","salah eddin harouache","Zarghoune Islam"],history:[]},
+{name:"Team 14",played:0,wins:0,draws:0,losses:0,points:0,gd:0,gf:0,ga:0,members:["TAHA EL GHASSEL","Mohamed yassine elkhatibi","Douhaoui Douae","Bertal sara","Imane abidar","Hossine brital"],history:[]},
+{name:"Team 15",played:0,wins:0,draws:0,losses:0,points:0,gd:0,gf:0,ga:0,members:["Youssef Yadini","Oussama ID LAASRI","Hafssa Mahjoub","Belokda houda","Nour EL hajji","Hanane boukassal"],history:[]},
+{name:"Team 16",played:0,wins:0,draws:0,losses:0,points:0,gd:0,gf:0,ga:0,members:["Belghazi Basma","Tarmoun marwa","Yahya litim","Bouchra Balaje","Aoussam Rania","Abderrahmane ait mansour","Soukaina benzaddou"],history:[]},
+{name:"Team 17",played:0,wins:0,draws:0,losses:0,points:0,gd:0,gf:0,ga:0,members:["Yasser Yjjou","Nissrine el haini","Fath-allah amine","Soufiane chlieh","Zayneb Richard","soumia BEN-FARES"],history:[]},
+{name:"Team 18",played:0,wins:0,draws:0,losses:0,points:0,gd:0,gf:0,ga:0,members:["Amine essalhi","Safa tarmoun","yassine hatana","Hafsa kadmi","Soufiane labrag","Aya El_frouni"],history:[]}
 ];
 
-const matches = [
-
-{day:"Day 1",a:"Team 1",b:"Team 16",sa:0,sb:4},
-{day:"Day 1",a:"Team 2",b:"Team 15",sa:2,sb:0},
-{day:"Day 1",a:"Team 3",b:"Team 14",sa:4,sb:4},
-{day:"Day 1",a:"Team 4",b:"Team 13",sa:0,sb:4},
-{day:"Day 1",a:"Team 5",b:"Team 12",sa:1,sb:0},
-{day:"Day 1",a:"Team 6",b:"Team 17",sa:1,sb:2},
-{day:"Day 1",a:"Team 7",b:"Team 10",sa:2,sb:0},
-{day:"Day 1",a:"Team 8",b:"Team 9",sa:0,sb:2},
-{day:"Day 1",a:"Team 18",b:"Team 11",sa:0,sb:4},
-
-{day:"Day 2",a:"Team 18",b:"Team 13",sa:0,sb:2},
-{day:"Day 2",a:"Team 3",b:"Team 12",sa:0,sb:0},
-{day:"Day 2",a:"Team 6",b:"Team 9",sa:1,sb:0},
-{day:"Day 2",a:"Team 4",b:"Team 11",sa:4,sb:0},
-{day:"Day 2",a:"Team 7",b:"Team 8",sa:3,sb:0},
-{day:"Day 2",a:"Team 5",b:"Team 10",sa:4,sb:0},
-{day:"Day 2",a:"Team 17",b:"Team 2",sa:0,sb:2},
-{day:"Day 2",a:"Team 1",b:"Team 15",sa:0,sb:4},
-{day:"Day 2",a:"Team 16",b:"Team 14",sa:1,sb:0}
-
+// Day1
+const day1=[
+{teamA:"Team 1",teamB:"Team 16",scoreA:0,scoreB:4,date:"2026-03-07"},
+{teamA:"Team 2",teamB:"Team 15",scoreA:2,scoreB:0,date:"2026-03-07"},
+{teamA:"Team 3",teamB:"Team 14",scoreA:4,scoreB:4,date:"2026-03-07"},
+{teamA:"Team 4",teamB:"Team 13",scoreA:0,scoreB:4,date:"2026-03-07"},
+{teamA:"Team 5",teamB:"Team 12",scoreA:1,scoreB:0,date:"2026-03-07"},
+{teamA:"Team 6",teamB:"Team 17",scoreA:1,scoreB:2,date:"2026-03-07"},
+{teamA:"Team 7",teamB:"Team 10",scoreA:2,scoreB:0,date:"2026-03-07"},
+{teamA:"Team 8",teamB:"Team 9",scoreA:0,scoreB:2,date:"2026-03-07"},
+{teamA:"Team 18",teamB:"Team 11",scoreA:0,scoreB:4,date:"2026-03-07"}
 ];
 
-matches.forEach(m=>{
-let A=teams.find(t=>t.name===m.a);
-let B=teams.find(t=>t.name===m.b);
+// Day2
+const day2=[
+{teamA:"Team 18",teamB:"Team 13",scoreA:0,scoreB:2,date:"2026-03-08"},
+{teamA:"Team 3",teamB:"Team 12",scoreA:0,scoreB:0,date:"2026-03-08"},
+{teamA:"Team 6",teamB:"Team 9",scoreA:1,scoreB:0,date:"2026-03-08"},
+{teamA:"Team 4",teamB:"Team 11",scoreA:4,scoreB:0,date:"2026-03-08"},
+{teamA:"Team 7",teamB:"Team 8",scoreA:3,scoreB:0,date:"2026-03-08"},
+{teamA:"Team 5",teamB:"Team 10",scoreA:4,scoreB:0,date:"2026-03-08"},
+{teamA:"Team 17",teamB:"Team 2",scoreA:0,scoreB:2,date:"2026-03-08"},
+{teamA:"Team 1",teamB:"Team 15",scoreA:0,scoreB:4,date:"2026-03-08"},
+{teamA:"Team 16",teamB:"Team 14",scoreA:1,scoreB:0,date:"2026-03-08"}
+];
 
-A.played++; B.played++;
+function update(results){
+results.forEach(r=>{
+const A=teams.find(t=>t.name===r.teamA);
+const B=teams.find(t=>t.name===r.teamB);
 
-A.gf+=m.sa; A.ga+=m.sb;
-B.gf+=m.sb; B.ga+=m.sa;
+A.played++;B.played++;
+
+A.gf+=r.scoreA;A.ga+=r.scoreB;
+B.gf+=r.scoreB;B.ga+=r.scoreA;
 
 A.gd=A.gf-A.ga;
 B.gd=B.gf-B.ga;
 
-if(m.sa>m.sb){A.wins++;B.losses++;A.points+=3;}
-else if(m.sa<m.sb){B.wins++;A.losses++;B.points+=3;}
+if(r.scoreA>r.scoreB){A.wins++;A.points+=3;B.losses++;}
+else if(r.scoreB>r.scoreA){B.wins++;B.points+=3;A.losses++;}
 else{A.draws++;B.draws++;A.points++;B.points++;}
 
-A.history.push({day:m.day,opponent:m.b,score:m.sa+"-"+m.sb});
-B.history.push({day:m.day,opponent:m.a,score:m.sb+"-"+m.sa});
-
+A.history.push({date:r.date,opponent:B.name,result:r.scoreA>r.scoreB?"W":r.scoreA<r.scoreB?"L":"D",score:r.scoreA+"-"+r.scoreB});
+B.history.push({date:r.date,opponent:A.name,result:r.scoreB>r.scoreA?"W":r.scoreB<r.scoreA?"L":"D",score:r.scoreB+"-"+r.scoreA});
 });
+}
 
-teams.sort((a,b)=>{
-if(b.points!=a.points) return b.points-a.points;
-if(b.gd!=a.gd) return b.gd-a.gd;
-return b.gf-a.gf;
-});
+update(day1);
+update(day2);
 
-const standings=document.getElementById("standings");
+function standings(){
+const table=document.getElementById("standings");
+table.innerHTML="";
+
+teams.sort((a,b)=>b.points-a.points||b.gd-a.gd||b.gf-a.gf);
 
 teams.forEach((t,i)=>{
-let tr=document.createElement("tr");
+const tr=document.createElement("tr");
 
-if(i==0) tr.classList.add("rank1");
-if(i==1) tr.classList.add("rank2");
-if(i==2) tr.classList.add("rank3");
+if(i==0)tr.classList.add("rank1");
+if(i==1)tr.classList.add("rank2");
+if(i==2)tr.classList.add("rank3");
 
 tr.innerHTML=`
 <td>${i+1}</td>
@@ -251,10 +254,9 @@ tr.innerHTML=`
 `;
 
 tr.onclick=()=>showTeam(t);
-
-standings.appendChild(tr);
-
+table.appendChild(tr);
 });
+}
 
 function showTeam(team){
 
@@ -263,29 +265,34 @@ document.getElementById("teamTitle").innerText=team.name;
 const members=document.getElementById("members");
 members.innerHTML="";
 team.members.forEach(m=>{
-let li=document.createElement("li");
-li.innerText=m;
+const li=document.createElement("li");
+li.textContent=m;
 members.appendChild(li);
 });
+
+document.getElementById("performanceText").innerText=
+"Wins: "+team.wins+" Draws: "+team.draws+" Losses: "+team.losses;
 
 const history=document.getElementById("history");
 history.innerHTML="";
 
 team.history.forEach(h=>{
-let tr=document.createElement("tr");
+const tr=document.createElement("tr");
 tr.innerHTML=`
-<td>${h.day}</td>
+<td>${h.date}</td>
 <td>${h.opponent}</td>
+<td>${h.result}</td>
 <td>${h.score}</td>
 `;
 history.appendChild(tr);
 });
 
 new bootstrap.Modal(document.getElementById("teamModal")).show();
-
 }
 
-</script></body>
+standings();
+
+</script>
+
+</body>
 </html>
-
-
