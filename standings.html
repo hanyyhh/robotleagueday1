@@ -177,64 +177,65 @@ const teams = [
 {name:"Team 18",members:["Amine essalhi","Safa tarmoun","yassine hatana","Hafsa kadmi","Soufiane labrag","Aya El_frouni"],history:[],played:0,wins:0,draws:0,losses:0,points:0,gf:0,ga:0,gd:0}
 ];
 
-const results = [
+const matches = [
 
-{day:"Day 1",teamA:"Team 1",teamB:"Team 16",scoreA:0,scoreB:4},
-{day:"Day 1",teamA:"Team 2",teamB:"Team 15",scoreA:2,scoreB:0},
-{day:"Day 1",teamA:"Team 3",teamB:"Team 14",scoreA:4,scoreB:4},
-{day:"Day 1",teamA:"Team 4",teamB:"Team 13",scoreA:0,scoreB:4},
-{day:"Day 1",teamA:"Team 5",teamB:"Team 12",scoreA:1,scoreB:0},
-{day:"Day 1",teamA:"Team 6",teamB:"Team 17",scoreA:1,scoreB:2},
-{day:"Day 1",teamA:"Team 7",teamB:"Team 10",scoreA:2,scoreB:0},
-{day:"Day 1",teamA:"Team 8",teamB:"Team 9",scoreA:0,scoreB:2},
-{day:"Day 1",teamA:"Team 18",teamB:"Team 11",scoreA:0,scoreB:4},
+{day:"Day 1",a:"Team 1",b:"Team 16",sa:0,sb:4},
+{day:"Day 1",a:"Team 2",b:"Team 15",sa:2,sb:0},
+{day:"Day 1",a:"Team 3",b:"Team 14",sa:4,sb:4},
+{day:"Day 1",a:"Team 4",b:"Team 13",sa:0,sb:4},
+{day:"Day 1",a:"Team 5",b:"Team 12",sa:1,sb:0},
+{day:"Day 1",a:"Team 6",b:"Team 17",sa:1,sb:2},
+{day:"Day 1",a:"Team 7",b:"Team 10",sa:2,sb:0},
+{day:"Day 1",a:"Team 8",b:"Team 9",sa:0,sb:2},
+{day:"Day 1",a:"Team 18",b:"Team 11",sa:0,sb:4},
 
-{day:"Day 2",teamA:"Team 18",teamB:"Team 13",scoreA:0,scoreB:2},
-{day:"Day 2",teamA:"Team 3",teamB:"Team 12",scoreA:0,scoreB:0},
-{day:"Day 2",teamA:"Team 6",teamB:"Team 9",scoreA:1,scoreB:0},
-{day:"Day 2",teamA:"Team 4",teamB:"Team 11",scoreA:4,scoreB:0},
-{day:"Day 2",teamA:"Team 7",teamB:"Team 8",scoreA:3,scoreB:0},
-{day:"Day 2",teamA:"Team 5",teamB:"Team 10",scoreA:4,scoreB:0},
-{day:"Day 2",teamA:"Team 17",teamB:"Team 2",scoreA:0,scoreB:2},
-{day:"Day 2",teamA:"Team 1",teamB:"Team 15",scoreA:0,scoreB:4},
-{day:"Day 2",teamA:"Team 16",teamB:"Team 14",scoreA:1,scoreB:0}
+{day:"Day 2",a:"Team 18",b:"Team 13",sa:0,sb:2},
+{day:"Day 2",a:"Team 3",b:"Team 12",sa:0,sb:0},
+{day:"Day 2",a:"Team 6",b:"Team 9",sa:1,sb:0},
+{day:"Day 2",a:"Team 4",b:"Team 11",sa:4,sb:0},
+{day:"Day 2",a:"Team 7",b:"Team 8",sa:3,sb:0},
+{day:"Day 2",a:"Team 5",b:"Team 10",sa:4,sb:0},
+{day:"Day 2",a:"Team 17",b:"Team 2",sa:0,sb:2},
+{day:"Day 2",a:"Team 1",b:"Team 15",sa:0,sb:4},
+{day:"Day 2",a:"Team 16",b:"Team 14",sa:1,sb:0}
 
 ];
 
-results.forEach(r=>{
-const A=teams.find(t=>t.name===r.teamA);
-const B=teams.find(t=>t.name===r.teamB);
+matches.forEach(m=>{
+let A=teams.find(t=>t.name===m.a);
+let B=teams.find(t=>t.name===m.b);
 
-A.played++;B.played++;
+A.played++; B.played++;
 
-A.gf+=r.scoreA;A.ga+=r.scoreB;
-B.gf+=r.scoreB;B.ga+=r.scoreA;
+A.gf+=m.sa; A.ga+=m.sb;
+B.gf+=m.sb; B.ga+=m.sa;
 
 A.gd=A.gf-A.ga;
 B.gd=B.gf-B.ga;
 
-if(r.scoreA>r.scoreB){A.wins++;B.losses++;A.points+=3;}
-else if(r.scoreA<r.scoreB){B.wins++;A.losses++;B.points+=3;}
+if(m.sa>m.sb){A.wins++;B.losses++;A.points+=3;}
+else if(m.sa<m.sb){B.wins++;A.losses++;B.points+=3;}
 else{A.draws++;B.draws++;A.points++;B.points++;}
 
-A.history.push({day:r.day,opponent:r.teamB,score:`${r.scoreA}-${r.scoreB}`});
-B.history.push({day:r.day,opponent:r.teamA,score:`${r.scoreB}-${r.scoreA}`});
+A.history.push({day:m.day,opponent:m.b,score:m.sa+"-"+m.sb});
+B.history.push({day:m.day,opponent:m.a,score:m.sb+"-"+m.sa});
+
 });
 
 teams.sort((a,b)=>{
-if(b.points!==a.points)return b.points-a.points;
-if(b.gd!==a.gd)return b.gd-a.gd;
+if(b.points!=a.points) return b.points-a.points;
+if(b.gd!=a.gd) return b.gd-a.gd;
 return b.gf-a.gf;
 });
 
-const table=document.getElementById("standings");
+const standings=document.getElementById("standings");
 
 teams.forEach((t,i)=>{
-const tr=document.createElement("tr");
+let tr=document.createElement("tr");
 
-if(i==0)tr.classList.add("rank1");
-if(i==1)tr.classList.add("rank2");
-if(i==2)tr.classList.add("rank3");
+if(i==0) tr.classList.add("rank1");
+if(i==1) tr.classList.add("rank2");
+if(i==2) tr.classList.add("rank3");
 
 tr.innerHTML=`
 <td>${i+1}</td>
@@ -249,11 +250,42 @@ tr.innerHTML=`
 <td>${t.ga}</td>
 `;
 
-table.appendChild(tr);
+tr.onclick=()=>showTeam(t);
+
+standings.appendChild(tr);
 
 });
 
-</script>
-</body>
+function showTeam(team){
+
+document.getElementById("teamTitle").innerText=team.name;
+
+const members=document.getElementById("members");
+members.innerHTML="";
+team.members.forEach(m=>{
+let li=document.createElement("li");
+li.innerText=m;
+members.appendChild(li);
+});
+
+const history=document.getElementById("history");
+history.innerHTML="";
+
+team.history.forEach(h=>{
+let tr=document.createElement("tr");
+tr.innerHTML=`
+<td>${h.day}</td>
+<td>${h.opponent}</td>
+<td>${h.score}</td>
+`;
+history.appendChild(tr);
+});
+
+new bootstrap.Modal(document.getElementById("teamModal")).show();
+
+}
+
+</script></body>
 </html>
+
 
