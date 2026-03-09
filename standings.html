@@ -176,31 +176,11 @@ const teams = [
 {name:"Team 18",played:0,wins:0,draws:0,losses:0,points:0,gd:0,gf:0,ga:0,members:["Amine essalhi","Safa tarmoun","yassine hatana","Hafsa kadmi","Soufiane labrag","Aya El_frouni"],history:[]}
 ];
 
-// Day1
-const day1=[
-{teamA:"Team 1",teamB:"Team 16",scoreA:0,scoreB:4,date:"2026-03-07"},
-{teamA:"Team 2",teamB:"Team 15",scoreA:2,scoreB:0,date:"2026-03-07"},
-{teamA:"Team 3",teamB:"Team 14",scoreA:4,scoreB:4,date:"2026-03-07"},
-{teamA:"Team 4",teamB:"Team 13",scoreA:0,scoreB:4,date:"2026-03-07"},
-{teamA:"Team 5",teamB:"Team 12",scoreA:1,scoreB:0,date:"2026-03-07"},
-{teamA:"Team 6",teamB:"Team 17",scoreA:1,scoreB:2,date:"2026-03-07"},
-{teamA:"Team 7",teamB:"Team 10",scoreA:2,scoreB:0,date:"2026-03-07"},
-{teamA:"Team 8",teamB:"Team 9",scoreA:0,scoreB:2,date:"2026-03-07"},
-{teamA:"Team 18",teamB:"Team 11",scoreA:0,scoreB:4,date:"2026-03-07"}
-];
+const day1=[{teamA:"Team 1",teamB:"Team 16",scoreA:0,scoreB:4,date:"2026-03-07"},{teamA:"Team 2",teamB:"Team 15",scoreA:2,scoreB:0,date:"2026-03-07"},{teamA:"Team 3",teamB:"Team 14",scoreA:4,scoreB:4,date:"2026-03-07"},{teamA:"Team 4",teamB:"Team 13",scoreA:0,scoreB:4,date:"2026-03-07"},{teamA:"Team 5",teamB:"Team 12",scoreA:1,scoreB:0,date:"2026-03-07"},{teamA:"Team 6",teamB:"Team 17",scoreA:1,scoreB:2,date:"2026-03-07"},{teamA:"Team 7",teamB:"Team 10",scoreA:2,scoreB:0,date:"2026-03-07"},{teamA:"Team 8",teamB:"Team 9",scoreA:0,scoreB:2,date:"2026-03-07"},{teamA:"Team 18",teamB:"Team 11",scoreA:0,scoreB:4,date:"2026-03-07"}];
 
-// Day2
-const day2=[
-{teamA:"Team 18",teamB:"Team 13",scoreA:0,scoreB:2,date:"2026-03-08"},
-{teamA:"Team 3",teamB:"Team 12",scoreA:0,scoreB:0,date:"2026-03-08"},
-{teamA:"Team 6",teamB:"Team 9",scoreA:1,scoreB:0,date:"2026-03-08"},
-{teamA:"Team 4",teamB:"Team 11",scoreA:4,scoreB:0,date:"2026-03-08"},
-{teamA:"Team 7",teamB:"Team 8",scoreA:3,scoreB:0,date:"2026-03-08"},
-{teamA:"Team 5",teamB:"Team 10",scoreA:4,scoreB:0,date:"2026-03-08"},
-{teamA:"Team 17",teamB:"Team 2",scoreA:0,scoreB:2,date:"2026-03-08"},
-{teamA:"Team 1",teamB:"Team 15",scoreA:4,scoreB:0,date:"2026-03-08"},
-{teamA:"Team 16",teamB:"Team 14",scoreA:1,scoreB:0,date:"2026-03-08"}
-];
+const day2=[{teamA:"Team 18",teamB:"Team 13",scoreA:0,scoreB:2,date:"2026-03-08"},{teamA:"Team 3",teamB:"Team 12",scoreA:0,scoreB:0,date:"2026-03-08"},{teamA:"Team 6",teamB:"Team 9",scoreA:1,scoreB:0,date:"2026-03-08"},{teamA:"Team 4",teamB:"Team 11",scoreA:4,scoreB:0,date:"2026-03-08"},{teamA:"Team 7",teamB:"Team 8",scoreA:3,scoreB:0,date:"2026-03-08"},{teamA:"Team 5",teamB:"Team 10",scoreA:4,scoreB:0,date:"2026-03-08"},{teamA:"Team 17",teamB:"Team 2",scoreA:0,scoreB:2,date:"2026-03-08"},{teamA:"Team 1",teamB:"Team 15",scoreA:4,scoreB:0,date:"2026-03-08"},{teamA:"Team 16",teamB:"Team 14",scoreA:1,scoreB:0,date:"2026-03-08"}];
+
+const day3=[{teamA:"Team 1",teamB:"Team 14",scoreA:0,scoreB:3,date:"2026-03-09"},{teamA:"Team 15",teamB:"Team 13",scoreA:1,scoreB:0,date:"2026-03-09"},{teamA:"Team 16",teamB:"Team 12",scoreA:0,scoreB:2,date:"2026-03-09"},{teamA:"Team 2",teamB:"Team 11",scoreA:4,scoreB:0,date:"2026-03-09"},{teamA:"Team 5",teamB:"Team 8",scoreA:1,scoreB:0,date:"2026-03-09"},{teamA:"Team 6",teamB:"Team 7",scoreA:0,scoreB:4,date:"2026-03-09"},{teamA:"Team 3",teamB:"Team 10",scoreA:4,scoreB:0,date:"2026-03-09"},{teamA:"Team 4",teamB:"Team 9",scoreA:0,scoreB:1,date:"2026-03-09"},{teamA:"Team 17",teamB:"Team 18",scoreA:1,scoreB:1,date:"2026-03-09"}];
 
 function update(results){
 results.forEach(r=>{
@@ -226,6 +206,7 @@ B.history.push({date:r.date,opponent:A.name,result:r.scoreB>r.scoreA?"W":r.score
 
 update(day1);
 update(day2);
+update(day3);
 
 function standings(){
 const table=document.getElementById("standings");
@@ -296,4 +277,3 @@ standings();
 
 </body>
 </html>
-
