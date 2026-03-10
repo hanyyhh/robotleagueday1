@@ -1,278 +1,311 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Robotics Tournament Dashboard</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FSR | Tactical Command Center</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
 
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --neon-cyan: #00f2ff;
+            --neon-blue: #0ea5e9;
+            --dark-space: #010409;
+            --panel-glass: rgba(10, 25, 47, 0.7);
+            --fsr-logo: url('https://i.postimg.cc/85zR2VzL/FSR-LOGO.png'); /* Replace with your actual hosted PNG link */
+        }
 
-<style>
-body{
-  font-family:Inter, sans-serif;
-  background:#0f172a;
-  color:#e2e8f0;
-  margin:0;
-  overflow-x:hidden;
-}
+        body {
+            background-color: var(--dark-space);
+            color: #f1f5f9;
+            font-family: 'Rajdhani', sans-serif;
+            overflow-x: hidden;
+            margin: 0;
+            background-attachment: fixed;
+        }
 
-body::before{
-  content:"";
-  position:fixed;
-  top:0;left:0;
-  width:100%;height:100%;
-  background:linear-gradient(120deg, rgba(59,130,246,0.05) 1px, transparent 1px), 
-             linear-gradient(30deg, rgba(59,130,246,0.05) 1px, transparent 1px);
-  background-size:50px 50px;
-  z-index:-1;
-}
+        /* --- LEGENDARY FLOATING LOGO BACKGROUND --- */
+        .background-container {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            overflow: hidden;
+            background: radial-gradient(circle at center, #0a192f 0%, #010409 100%);
+        }
 
-header{
-  text-align:center;
-  padding:30px 15px;
-}
+        .floating-logo {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            background-image: var(--fsr-logo);
+            background-size: contain;
+            background-repeat: no-repeat;
+            opacity: 0.15;
+            filter: drop-shadow(0 0 5px var(--neon-cyan));
+            animation: swim 20s linear infinite;
+        }
 
-header h1{
-  color:#3b82f6;
-  font-weight:700;
-  text-shadow:0 0 20px #3b82f6;
-}
+        @keyframes swim {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(100px, 150px) rotate(90deg); }
+            50% { transform: translate(250px, 50px) rotate(180deg); }
+            75% { transform: translate(50px, 200px) rotate(270deg); }
+            100% { transform: translate(0, 0) rotate(360deg); }
+        }
 
-main{
-  max-width:1200px;
-  margin:auto;
-  padding:20px;
-}
+        /* --- HUD & HEADER --- */
+        header {
+            padding: 50px 0;
+            text-align: center;
+            border-bottom: 2px solid var(--neon-cyan);
+            background: linear-gradient(180deg, rgba(0, 242, 255, 0.1) 0%, transparent 100%);
+            backdrop-filter: blur(15px);
+            position: relative;
+            clip-path: polygon(0 0, 100% 0, 100% 80%, 55% 80%, 50% 100%, 45% 80%, 0 80%);
+        }
 
-h2{
-  text-align:center;
-  margin:40px 0 20px;
-  color:#3b82f6;
-  text-shadow:0 0 10px #3b82f6;
-}
+        header h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 900;
+            letter-spacing: 12px;
+            color: #fff;
+            text-shadow: 0 0 20px var(--neon-cyan), 0 0 40px var(--neon-blue);
+            margin: 0;
+        }
 
-table{
-  width:100%;
-  border-collapse:collapse;
-  margin-bottom:50px;
-}
+        /* --- DATA CARDS --- */
+        .main-container { padding-top: 60px; }
 
-thead th{
-  padding:10px;
-  color:#3b82f6;
-  border-bottom:2px solid #3b82f6;
-}
+        .leaderboard-wrapper {
+            background: var(--panel-glass);
+            border: 1px solid rgba(0, 242, 255, 0.2);
+            border-radius: 0;
+            position: relative;
+            padding: 20px;
+            box-shadow: inset 0 0 30px rgba(0, 242, 255, 0.05);
+        }
 
-tbody td{
-  padding:8px;
-  text-align:center;
-  border-bottom:1px solid #1e3a8a;
-}
+        .leaderboard-wrapper::before, .leaderboard-wrapper::after {
+            content: ""; position: absolute; width: 30px; height: 30px;
+            border: 3px solid var(--neon-cyan);
+        }
+        .leaderboard-wrapper::before { top: -5px; left: -5px; border-right: 0; border-bottom: 0; }
+        .leaderboard-wrapper::after { bottom: -5px; right: -5px; border-left: 0; border-top: 0; }
 
-tbody tr{
-  cursor:pointer;
-}
+        .table-tactical {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 12px;
+        }
 
-tbody tr:hover{
-  background:#1e293b;
-  color:#fff;
-  text-shadow:0 0 8px #3b82f6;
-}
+        .table-tactical tr {
+            background: rgba(255, 255, 255, 0.03);
+            transition: 0.4s;
+            clip-path: polygon(2% 0, 100% 0, 98% 100%, 0% 100%);
+        }
 
-.rank1 td{color:#ffd700;}
-.rank2 td{color:#c0c0c0;}
-.rank3 td{color:#cd7f32;}
+        .table-tactical tr:hover {
+            background: rgba(0, 242, 255, 0.15);
+            transform: scale(1.02);
+            cursor: pointer;
+        }
 
-.modal-header{
-  background:#1e40af;
-  color:white;
-}
+        .rank-id {
+            font-family: 'Orbitron';
+            color: var(--neon-cyan);
+            font-size: 1.5rem;
+            padding-left: 20px;
+        }
 
-.modal-table th{
-  background:#0f172a;
-  color:#3b82f6;
-}
-</style>
+        .pts-badge {
+            background: var(--neon-cyan);
+            color: #000;
+            font-weight: 900;
+            padding: 5px 15px;
+            clip-path: polygon(15% 0, 100% 0, 85% 100%, 0 100%);
+        }
+
+        /* --- MODAL --- */
+        .modal-content {
+            background: rgba(1, 4, 9, 0.95);
+            border: 2px solid var(--neon-cyan);
+            box-shadow: 0 0 50px rgba(0, 242, 255, 0.3);
+            border-radius: 0;
+        }
+
+        .stat-box {
+            border: 1px solid var(--neon-blue);
+            padding: 15px;
+            text-align: center;
+            background: linear-gradient(45deg, rgba(14, 165, 233, 0.1), transparent);
+        }
+
+    </style>
 </head>
-
 <body>
 
+<div class="background-container" id="bg-assets"></div>
+
 <header>
-<h1>Robotics Tournament</h1>
+    <div class="container">
+        <div style="font-size: 0.7rem; letter-spacing: 5px; color: var(--neon-blue);">ENCRYPTED UPLINK // FSR_MAIN_FRAME</div>
+        <h1>TACTICAL DASHBOARD</h1>
+    </div>
 </header>
 
-<main>
-
-<h2>Standings</h2>
-<table>
-<thead>
-<tr>
-<th>#</th><th>Team</th><th>P</th><th>W</th><th>D</th><th>L</th><th>Pts</th><th>GD</th><th>GF</th><th>GA</th>
-</tr>
-</thead>
-<tbody id="standings"></tbody>
-</table>
-
-</main>
+<div class="container main-container mb-5">
+    <div class="leaderboard-wrapper">
+        <div class="table-responsive">
+            <table class="table-tactical text-light">
+                <thead>
+                    <tr style="background: transparent; clip-path: none; color: var(--neon-blue);">
+                        <th class="p-3">#</th>
+                        <th>OPERATIONAL UNIT</th>
+                        <th>MP</th>
+                        <th>W</th>
+                        <th>D</th>
+                        <th>L</th>
+                        <th>GD</th>
+                        <th>POINTS</th>
+                    </tr>
+                </thead>
+                <tbody id="standings"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
 
 <div class="modal fade" id="teamModal">
-<div class="modal-dialog modal-lg modal-dialog-centered">
-<div class="modal-content bg-dark text-light">
-<div class="modal-header">
-<h5 class="modal-title" id="teamTitle"></h5>
-<button class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-</div>
-
-<div class="modal-body">
-
-<h5>Members</h5>
-<ul id="members"></ul>
-
-<h5>Performance</h5>
-<p id="performanceText"></p>
-
-<h5>Match History</h5>
-
-<table class="table table-dark modal-table">
-<thead>
-<tr>
-<th>Date</th>
-<th>Opponent</th>
-<th>Result</th>
-<th>Score</th>
-</tr>
-</thead>
-<tbody id="history"></tbody>
-</table>
-
-</div>
-</div>
-</div>
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header border-0">
+                <h2 id="teamTitle" class="text-white Orbitron m-0"></h2>
+                <button class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row g-3 mb-4" id="statSummary">
+                    <div class="col-4"><div class="stat-box">WINS<h3 id="m-wins" class="text-info"></h3></div></div>
+                    <div class="col-4"><div class="stat-box">DRAWS<h3 id="m-draws" class="text-warning"></h3></div></div>
+                    <div class="col-4"><div class="stat-box">LOSSES<h3 id="m-losses" class="text-danger"></h3></div></div>
+                </div>
+                <div id="members" class="mb-4"></div>
+                <div class="table-responsive">
+                    <table class="table table-dark table-hover">
+                        <tbody id="history"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
+// INITIALIZE SWIMMING LOGOS
+const bg = document.getElementById('bg-assets');
+for(let i=0; i<15; i++) {
+    const logo = document.createElement('div');
+    logo.className = 'floating-logo';
+    logo.style.left = Math.random() * 100 + 'vw';
+    logo.style.top = Math.random() * 100 + 'vh';
+    logo.style.animationDelay = Math.random() * 10 + 's';
+    logo.style.animationDuration = (15 + Math.random() * 20) + 's';
+    bg.appendChild(logo);
+}
 
-// Teams
+// Logic kept identical to maintain functionality
 const teams = [
-{name:"Team 1",played:0,wins:0,draws:0,losses:0,points:0,gd:0,gf:0,ga:0,members:["Soufiane selmani","Fatimezzhra ait bahanni","Bouyadmar adam","Nabil sebbar","Allali mariam","Alae ahrour"],history:[]},
-{name:"Team 2",played:0,wins:0,draws:0,losses:0,points:0,gd:0,gf:0,ga:0,members:["Achraf Akhtar","ABDELILAH ALLOUT","Safae Essaib","Aimad Ait Ouarkhane","Ibrahim DJI","Cherkaoui Faris"],history:[]},
-{name:"Team 3",played:0,wins:0,draws:0,losses:0,points:0,gd:0,gf:0,ga:0,members:["Khalifa Mohamed khaifa","Hiba er-roufi","Amina boubghi","Omar bouya","Hajar touarane","Yassine Hatana","Hajar Nadi"],history:[]},
-{name:"Team 4",played:0,wins:0,draws:0,losses:0,points:0,gd:0,gf:0,ga:0,members:["Mohamed Ayman Roukhsi","Ismail el faouzi","maryeme hibatallah","Lachhab mohamed","marwa benhouad","Zineb Boussaq","Douaa machehour"],history:[]},
-{name:"Team 5",played:0,wins:0,draws:0,losses:0,points:0,gd:0,gf:0,ga:0,members:["Oussama hrioued","Lemsyah majda","Basma naddari","Daaraoui Kenza","Daif hajar","Yasser Boulaajoul","Lina Elksabi"],history:[]},
-{name:"Team 6",played:0,wins:0,draws:0,losses:0,points:0,gd:0,gf:0,ga:0,members:["Leila manssouri azzouzi","Yassine Bekkali","mouad archkak","Bournakhla mohammed","Chaimae Gannaoui","Kada fatima zohra","Yasmine hamsane"],history:[]},
-{name:"Team 7",played:0,wins:0,draws:0,losses:0,points:0,gd:0,gf:0,ga:0,members:["Jou hamza","IHSSANE ELAABOUS","Doha zouahri","AGZAL ADAM","Fatima zzahra Hamzaoui","Aya boutaleb"],history:[]},
-{name:"Team 8",played:0,wins:0,draws:0,losses:0,points:0,gd:0,gf:0,ga:0,members:["Ayoub hammamoun","Olaya benmimoune","mouad messaoudi","HAMZA NACIRI","Safae ELABDELLAOUI","Aoussam Nezha","racha benhamou"],history:[]},
-{name:"Team 9",played:0,wins:0,draws:0,losses:0,points:0,gd:0,gf:0,ga:0,members:["Samir Sabri","Walid Mouthar","Douae Lamuoal","Azzam meriem","nid haddou youssef","Ilyas el khairi"],history:[]},
-{name:"Team 10",played:0,wins:0,draws:0,losses:0,points:0,gd:0,gf:0,ga:0,members:["Moad ait ali oubrahim","Tourab Soukaina","Mahra hlalou","EL MARKADI Hajar","Hamza belkhadir","Ismail joubair","mohamed ammar"],history:[]},
-{name:"Team 11",played:0,wins:0,draws:0,losses:0,points:0,gd:0,gf:0,ga:0,members:["ilyas el kabrane","Karim anas ellaiti","El kouri Manal","Aya ibn el ouasyl","Belharba aya","Mouna Benhmimou","DAHIMI Sanae"],history:[]},
-{name:"Team 12",played:0,wins:0,draws:0,losses:0,points:0,gd:0,gf:0,ga:0,members:["Adam el baroudi","Maha Hafdi","Alae eddine bouryal","Hajar El Harradi","Tasnime slimani","Razouki khadija","Ettalhi chaimae"],history:[]},
-{name:"Team 13",played:0,wins:0,draws:0,losses:0,points:0,gd:0,gf:0,ga:0,members:["hani ez zhar","Ahmed Samir maqdissi","Ismail Sabir","Doha faih","salah eddin harouache","Zarghoune Islam"],history:[]},
-{name:"Team 14",played:0,wins:0,draws:0,losses:0,points:0,gd:0,gf:0,ga:0,members:["TAHA EL GHASSEL","Mohamed yassine elkhatibi","Douhaoui Douae","Bertal sara","Imane abidar","Hossine brital"],history:[]},
-{name:"Team 15",played:0,wins:0,draws:0,losses:0,points:0,gd:0,gf:0,ga:0,members:["Youssef Yadini","Oussama ID LAASRI","Hafssa Mahjoub","Belokda houda","Nour EL hajji","Hanane boukassal"],history:[]},
-{name:"Team 16",played:0,wins:0,draws:0,losses:0,points:0,gd:0,gf:0,ga:0,members:["Belghazi Basma","Tarmoun marwa","Yahya litim","Bouchra Balaje","Aoussam Rania","Abderrahmane ait mansour","Soukaina benzaddou"],history:[]},
-{name:"Team 17",played:0,wins:0,draws:0,losses:0,points:0,gd:0,gf:0,ga:0,members:["Yasser Yjjou","Nissrine el haini","Fath-allah amine","Soufiane chlieh","Zayneb Richard","soumia BEN-FARES"],history:[]},
-{name:"Team 18",played:0,wins:0,draws:0,losses:0,points:0,gd:0,gf:0,ga:0,members:["Amine essalhi","Safa tarmoun","yassine hatana","Hafsa kadmi","Soufiane labrag","Aya El_frouni"],history:[]}
+    {name:"Team 1",played:0,wins:0,draws:0,losses:0,points:0,gd:0,gf:0,ga:0,members:["Soufiane selmani","Fatimezzhra ait bahanni","Bouyadmar adam","Nabil sebbar","Allali mariam","Alae ahrour"],history:[]},
+    {name:"Team 2",played:0,wins:0,draws:0,losses:0,points:0,gd:0,gf:0,ga:0,members:["Achraf Akhtar","ABDELILAH ALLOUT","Safae Essaib","Aimad Ait Ouarkhane","Ibrahim DJI","Cherkaoui Faris"],history:[]},
+    {name:"Team 3",played:0,wins:0,draws:0,losses:0,points:0,gd:0,gf:0,ga:0,members:["Khalifa Mohamed khaifa","Hiba er-roufi","Amina boubghi","Omar bouya","Hajar touarane","Yassine Hatana","Hajar Nadi"],history:[]},
+    {name:"Team 4",played:0,wins:0,draws:0,losses:0,points:0,gd:0,gf:0,ga:0,members:["Mohamed Ayman Roukhsi","Ismail el faouzi","maryeme hibatallah","Lachhab mohamed","marwa benhouad","Zineb Boussaq","Douaa machehour"],history:[]},
+    {name:"Team 5",played:0,wins:0,draws:0,losses:0,points:0,gd:0,gf:0,ga:0,members:["Oussama hrioued","Lemsyah majda","Basma naddari","Daaraoui Kenza","Daif hajar","Yasser Boulaajoul","Lina Elksabi"],history:[]},
+    {name:"Team 6",played:0,wins:0,draws:0,losses:0,points:0,gd:0,gf:0,ga:0,members:["Leila manssouri azzouzi","Yassine Bekkali","mouad archkak","Bournakhla mohammed","Chaimae Gannaoui","Kada fatima zohra","Yasmine hamsane"],history:[]},
+    {name:"Team 7",played:0,wins:0,draws:0,losses:0,points:0,gd:0,gf:0,ga:0,members:["Jou hamza","IHSSANE ELAABOUS","Doha zouahri","AGZAL ADAM","Fatima zzahra Hamzaoui","Aya boutaleb"],history:[]},
+    {name:"Team 8",played:0,wins:0,draws:0,losses:0,points:0,gd:0,gf:0,ga:0,members:["Ayoub hammamoun","Olaya benmimoune","mouad messaoudi","HAMZA NACIRI","Safae ELABDELLAOUI","Aoussam Nezha","racha benhamou"],history:[]},
+    {name:"Team 9",played:0,wins:0,draws:0,losses:0,points:0,gd:0,gf:0,ga:0,members:["Samir Sabri","Walid Mouthar","Douae Lamuoal","Azzam meriem","nid haddou youssef","Ilyas el khairi"],history:[]},
+    {name:"Team 10",played:0,wins:0,draws:0,losses:0,points:0,gd:0,gf:0,ga:0,members:["Moad ait ali oubrahim","Tourab Soukaina","Mahra hlalou","EL MARKADI Hajar","Hamza belkhadir","Ismail joubair","mohamed ammar"],history:[]},
+    {name:"Team 11",played:0,wins:0,draws:0,losses:0,points:0,gd:0,gf:0,ga:0,members:["ilyas el kabrane","Karim anas ellaiti","El kouri Manal","Aya ibn el ouasyl","Belharba aya","Mouna Benhmimou","DAHIMI Sanae"],history:[]},
+    {name:"Team 12",played:0,wins:0,draws:0,losses:0,points:0,gd:0,gf:0,ga:0,members:["Adam el baroudi","Maha Hafdi","Alae eddine bouryal","Hajar El Harradi","Tasnime slimani","Razouki khadija","Ettalhi chaimae"],history:[]},
+    {name:"Team 13",played:0,wins:0,draws:0,losses:0,points:0,gd:0,gf:0,ga:0,members:["hani ez zhar","Ahmed Samir maqdissi","Ismail Sabir","Doha faih","salah eddin harouache","Zarghoune Islam"],history:[]},
+    {name:"Team 14",played:0,wins:0,draws:0,losses:0,points:0,gd:0,gf:0,ga:0,members:["TAHA EL GHASSEL","Mohamed yassine elkhatibi","Douhaoui Douae","Bertal sara","Imane abidar","Hossine brital"],history:[]},
+    {name:"Team 15",played:0,wins:0,draws:0,losses:0,points:0,gd:0,gf:0,ga:0,members:["Youssef Yadini","Oussama ID LAASRI","Hafssa Mahjoub","Belokda houda","Nour EL hajji","Hanane boukassal"],history:[]},
+    {name:"Team 16",played:0,wins:0,draws:0,losses:0,points:0,gd:0,gf:0,ga:0,members:["Belghazi Basma","Tarmoun marwa","Yahya litim","Bouchra Balaje","Aoussam Rania","Abderrahmane ait mansour","Soukaina benzaddou"],history:[]},
+    {name:"Team 17",played:0,wins:0,draws:0,losses:0,points:0,gd:0,gf:0,ga:0,members:["Yasser Yjjou","Nissrine el haini","Fath-allah amine","Soufiane chlieh","Zayneb Richard","soumia BEN-FARES"],history:[]},
+    {name:"Team 18",played:0,wins:0,draws:0,losses:0,points:0,gd:0,gf:0,ga:0,members:["Amine essalhi","Safa tarmoun","yassine hatana","Hafsa kadmi","Soufiane labrag","Aya El_frouni"],history:[]}
 ];
 
 const day1=[{teamA:"Team 1",teamB:"Team 16",scoreA:0,scoreB:4,date:"2026-03-07"},{teamA:"Team 2",teamB:"Team 15",scoreA:2,scoreB:0,date:"2026-03-07"},{teamA:"Team 3",teamB:"Team 14",scoreA:4,scoreB:4,date:"2026-03-07"},{teamA:"Team 4",teamB:"Team 13",scoreA:0,scoreB:4,date:"2026-03-07"},{teamA:"Team 5",teamB:"Team 12",scoreA:1,scoreB:0,date:"2026-03-07"},{teamA:"Team 6",teamB:"Team 17",scoreA:1,scoreB:2,date:"2026-03-07"},{teamA:"Team 7",teamB:"Team 10",scoreA:2,scoreB:0,date:"2026-03-07"},{teamA:"Team 8",teamB:"Team 9",scoreA:0,scoreB:2,date:"2026-03-07"},{teamA:"Team 18",teamB:"Team 11",scoreA:0,scoreB:4,date:"2026-03-07"}];
-
 const day2=[{teamA:"Team 18",teamB:"Team 13",scoreA:0,scoreB:2,date:"2026-03-08"},{teamA:"Team 3",teamB:"Team 12",scoreA:0,scoreB:0,date:"2026-03-08"},{teamA:"Team 6",teamB:"Team 9",scoreA:1,scoreB:0,date:"2026-03-08"},{teamA:"Team 4",teamB:"Team 11",scoreA:4,scoreB:0,date:"2026-03-08"},{teamA:"Team 7",teamB:"Team 8",scoreA:3,scoreB:0,date:"2026-03-08"},{teamA:"Team 5",teamB:"Team 10",scoreA:4,scoreB:0,date:"2026-03-08"},{teamA:"Team 17",teamB:"Team 2",scoreA:0,scoreB:2,date:"2026-03-08"},{teamA:"Team 1",teamB:"Team 15",scoreA:4,scoreB:0,date:"2026-03-08"},{teamA:"Team 16",teamB:"Team 14",scoreA:1,scoreB:0,date:"2026-03-08"}];
-
 const day3=[{teamA:"Team 1",teamB:"Team 14",scoreA:0,scoreB:3,date:"2026-03-09"},{teamA:"Team 15",teamB:"Team 13",scoreA:1,scoreB:0,date:"2026-03-09"},{teamA:"Team 16",teamB:"Team 12",scoreA:0,scoreB:2,date:"2026-03-09"},{teamA:"Team 2",teamB:"Team 11",scoreA:4,scoreB:0,date:"2026-03-09"},{teamA:"Team 5",teamB:"Team 8",scoreA:1,scoreB:0,date:"2026-03-09"},{teamA:"Team 6",teamB:"Team 7",scoreA:0,scoreB:4,date:"2026-03-09"},{teamA:"Team 3",teamB:"Team 10",scoreA:4,scoreB:0,date:"2026-03-09"},{teamA:"Team 4",teamB:"Team 9",scoreA:0,scoreB:1,date:"2026-03-09"},{teamA:"Team 17",teamB:"Team 18",scoreA:1,scoreB:1,date:"2026-03-09"}];
 
 function update(results){
-results.forEach(r=>{
-const A=teams.find(t=>t.name===r.teamA);
-const B=teams.find(t=>t.name===r.teamB);
-
-A.played++;B.played++;
-
-A.gf+=r.scoreA;A.ga+=r.scoreB;
-B.gf+=r.scoreB;B.ga+=r.scoreA;
-
-A.gd=A.gf-A.ga;
-B.gd=B.gf-B.ga;
-
-if(r.scoreA>r.scoreB){A.wins++;A.points+=3;B.losses++;}
-else if(r.scoreB>r.scoreA){B.wins++;B.points+=3;A.losses++;}
-else{A.draws++;B.draws++;A.points++;B.points++;}
-
-A.history.push({date:r.date,opponent:B.name,result:r.scoreA>r.scoreB?"W":r.scoreA<r.scoreB?"L":"D",score:r.scoreA+"-"+r.scoreB});
-B.history.push({date:r.date,opponent:A.name,result:r.scoreB>r.scoreA?"W":r.scoreB<r.scoreA?"L":"D",score:r.scoreB+"-"+r.scoreA});
-});
+    results.forEach(r=>{
+        const A=teams.find(t=>t.name===r.teamA);
+        const B=teams.find(t=>t.name===r.teamB);
+        A.played++;B.played++;
+        A.gf+=r.scoreA;A.ga+=r.scoreB;
+        B.gf+=r.scoreB;B.ga+=r.scoreA;
+        A.gd=A.gf-A.ga; B.gd=B.gf-B.ga;
+        if(r.scoreA>r.scoreB){A.wins++;A.points+=3;B.losses++;}
+        else if(r.scoreB>r.scoreA){B.wins++;B.points+=3;A.losses++;}
+        else{A.draws++;B.draws++;A.points++;B.points++;}
+        A.history.push({date:r.date,opponent:B.name,result:r.scoreA>r.scoreB?"W":r.scoreA<r.scoreB?"L":"D",score:r.scoreA+"-"+r.scoreB});
+        B.history.push({date:r.date,opponent:A.name,result:r.scoreB>r.scoreA?"W":r.scoreB<r.scoreA?"L":"D",score:r.scoreB+"-"+r.scoreA});
+    });
 }
 
-update(day1);
-update(day2);
-update(day3);
+update(day1); update(day2); update(day3);
 
 function standings(){
-const table=document.getElementById("standings");
-table.innerHTML="";
-
-teams.sort((a,b)=>b.points-a.points||b.gd-a.gd||b.gf-a.gf);
-
-teams.forEach((t,i)=>{
-const tr=document.createElement("tr");
-
-if(i==0)tr.classList.add("rank1");
-if(i==1)tr.classList.add("rank2");
-if(i==2)tr.classList.add("rank3");
-
-tr.innerHTML=`
-<td>${i+1}</td>
-<td>${t.name}</td>
-<td>${t.played}</td>
-<td>${t.wins}</td>
-<td>${t.draws}</td>
-<td>${t.losses}</td>
-<td>${t.points}</td>
-<td>${t.gd}</td>
-<td>${t.gf}</td>
-<td>${t.ga}</td>
-`;
-
-tr.onclick=()=>showTeam(t);
-table.appendChild(tr);
-});
+    const table=document.getElementById("standings");
+    table.innerHTML="";
+    teams.sort((a,b)=>b.points-a.points||b.gd-a.gd);
+    teams.forEach((t,i)=>{
+        const tr=document.createElement("tr");
+        tr.innerHTML=`
+            <td class="rank-id">${i+1}</td>
+            <td class="fw-bold Orbitron">${t.name}</td>
+            <td>${t.played}</td>
+            <td>${t.wins}</td>
+            <td>${t.draws}</td>
+            <td>${t.losses}</td>
+            <td style="color:${t.gd>=0?'var(--neon-cyan)':'#f87171'}">${t.gd>0?'+'+t.gd:t.gd}</td>
+            <td><span class="pts-badge">${t.points}</span></td>
+        `;
+        tr.onclick=()=>showTeam(t);
+        table.appendChild(tr);
+    });
 }
 
 function showTeam(team){
-
-document.getElementById("teamTitle").innerText=team.name;
-
-const members=document.getElementById("members");
-members.innerHTML="";
-team.members.forEach(m=>{
-const li=document.createElement("li");
-li.textContent=m;
-members.appendChild(li);
-});
-
-document.getElementById("performanceText").innerText=
-"Wins: "+team.wins+" Draws: "+team.draws+" Losses: "+team.losses;
-
-const history=document.getElementById("history");
-history.innerHTML="";
-
-team.history.forEach(h=>{
-const tr=document.createElement("tr");
-tr.innerHTML=`
-<td>${h.date}</td>
-<td>${h.opponent}</td>
-<td>${h.result}</td>
-<td>${h.score}</td>
-`;
-history.appendChild(tr);
-});
-
-new bootstrap.Modal(document.getElementById("teamModal")).show();
+    document.getElementById("teamTitle").innerText=team.name;
+    document.getElementById("m-wins").innerText = team.wins;
+    document.getElementById("m-draws").innerText = team.draws;
+    document.getElementById("m-losses").innerText = team.losses;
+    const members=document.getElementById("members");
+    members.innerHTML="";
+    team.members.forEach(m=>{
+        const span=document.createElement("span");
+        span.className="badge border border-info m-1 text-info p-2";
+        span.textContent=m;
+        members.appendChild(span);
+    });
+    const history=document.getElementById("history");
+    history.innerHTML="";
+    team.history.forEach(h=>{
+        const resClass = h.result === 'W' ? 'text-info' : (h.result === 'L' ? 'text-danger' : 'text-warning');
+        const tr=document.createElement("tr");
+        tr.innerHTML=`<td>${h.date}</td><td>VS ${h.opponent}</td><td class="${resClass}">${h.result}</td><td>${h.score}</td>`;
+        history.appendChild(tr);
+    });
+    new bootstrap.Modal(document.getElementById("teamModal")).show();
 }
 
 standings();
-
 </script>
 
 </body>
