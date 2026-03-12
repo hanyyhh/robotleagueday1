@@ -14,7 +14,7 @@
             --neon-blue: #0ea5e9;
             --dark-space: #010409;
             --panel-glass: rgba(10, 25, 47, 0.7);
-            --fsr-logo: url('image.png'); /* Replace with your actual hosted PNG link */
+            --fsr-logo: url('image.png'); 
         }
 
         body {
@@ -26,7 +26,6 @@
             background-attachment: fixed;
         }
 
-        /* --- LEGENDARY FLOATING LOGO BACKGROUND --- */
         .background-container {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -55,7 +54,6 @@
             100% { transform: translate(0, 0) rotate(360deg); }
         }
 
-        /* --- HUD & HEADER --- */
         header {
             padding: 50px 0;
             text-align: center;
@@ -75,7 +73,6 @@
             margin: 0;
         }
 
-        /* --- DATA CARDS --- */
         .main-container { padding-top: 60px; }
 
         .leaderboard-wrapper {
@@ -127,7 +124,6 @@
             clip-path: polygon(15% 0, 100% 0, 85% 100%, 0 100%);
         }
 
-        /* --- MODAL --- */
         .modal-content {
             background: rgba(1, 4, 9, 0.95);
             border: 2px solid var(--neon-cyan);
@@ -141,7 +137,6 @@
             text-align: center;
             background: linear-gradient(45deg, rgba(14, 165, 233, 0.1), transparent);
         }
-
     </style>
 </head>
 <body>
@@ -216,7 +211,6 @@ for(let i=0; i<15; i++) {
     bg.appendChild(logo);
 }
 
-// Logic kept identical to maintain functionality
 const teams = [
     {name:"Team 1",played:0,wins:0,draws:0,losses:0,points:0,gd:0,gf:0,ga:0,members:["Soufiane selmani","Fatimezzhra ait bahanni","Bouyadmar adam","Nabil sebbar","Allali mariam","Alae ahrour"],history:[]},
     {name:"Team 2",played:0,wins:0,draws:0,losses:0,points:0,gd:0,gf:0,ga:0,members:["Achraf Akhtar","ABDELILAH ALLOUT","Safae Essaib","Aimad Ait Ouarkhane","Ibrahim DJI","Cherkaoui Faris"],history:[]},
@@ -241,6 +235,7 @@ const teams = [
 const day1=[{teamA:"Team 1",teamB:"Team 16",scoreA:0,scoreB:4,date:"2026-03-07"},{teamA:"Team 2",teamB:"Team 15",scoreA:2,scoreB:0,date:"2026-03-07"},{teamA:"Team 3",teamB:"Team 14",scoreA:4,scoreB:4,date:"2026-03-07"},{teamA:"Team 4",teamB:"Team 13",scoreA:0,scoreB:4,date:"2026-03-07"},{teamA:"Team 5",teamB:"Team 12",scoreA:1,scoreB:0,date:"2026-03-07"},{teamA:"Team 6",teamB:"Team 17",scoreA:1,scoreB:2,date:"2026-03-07"},{teamA:"Team 7",teamB:"Team 10",scoreA:2,scoreB:0,date:"2026-03-07"},{teamA:"Team 8",teamB:"Team 9",scoreA:0,scoreB:2,date:"2026-03-07"},{teamA:"Team 18",teamB:"Team 11",scoreA:0,scoreB:4,date:"2026-03-07"}];
 const day2=[{teamA:"Team 18",teamB:"Team 13",scoreA:0,scoreB:2,date:"2026-03-08"},{teamA:"Team 3",teamB:"Team 12",scoreA:0,scoreB:0,date:"2026-03-08"},{teamA:"Team 6",teamB:"Team 9",scoreA:1,scoreB:0,date:"2026-03-08"},{teamA:"Team 4",teamB:"Team 11",scoreA:4,scoreB:0,date:"2026-03-08"},{teamA:"Team 7",teamB:"Team 8",scoreA:3,scoreB:0,date:"2026-03-08"},{teamA:"Team 5",teamB:"Team 10",scoreA:4,scoreB:0,date:"2026-03-08"},{teamA:"Team 17",teamB:"Team 2",scoreA:0,scoreB:2,date:"2026-03-08"},{teamA:"Team 1",teamB:"Team 15",scoreA:4,scoreB:0,date:"2026-03-08"},{teamA:"Team 16",teamB:"Team 14",scoreA:1,scoreB:0,date:"2026-03-08"}];
 const day3=[{teamA:"Team 1",teamB:"Team 14",scoreA:0,scoreB:3,date:"2026-03-09"},{teamA:"Team 15",teamB:"Team 13",scoreA:1,scoreB:0,date:"2026-03-09"},{teamA:"Team 16",teamB:"Team 12",scoreA:0,scoreB:2,date:"2026-03-09"},{teamA:"Team 2",teamB:"Team 11",scoreA:4,scoreB:0,date:"2026-03-09"},{teamA:"Team 5",teamB:"Team 8",scoreA:1,scoreB:0,date:"2026-03-09"},{teamA:"Team 6",teamB:"Team 7",scoreA:0,scoreB:4,date:"2026-03-09"},{teamA:"Team 3",teamB:"Team 10",scoreA:4,scoreB:0,date:"2026-03-09"},{teamA:"Team 4",teamB:"Team 9",scoreA:0,scoreB:1,date:"2026-03-09"},{teamA:"Team 17",teamB:"Team 18",scoreA:1,scoreB:1,date:"2026-03-09"}];
+const day4=[{teamA:"Team 17",teamB:"Team 5",scoreA:0,scoreB:3,date:"2026-03-10"},{teamA:"Team 4",teamB:"Team 7",scoreA:1,scoreB:2,date:"2026-03-10"},{teamA:"Team 6",teamB:"Team 18",scoreA:3,scoreB:1,date:"2026-03-10"},{teamA:"Team 1",teamB:"Team 13",scoreA:1,scoreB:1,date:"2026-03-10"},{teamA:"Team 14",teamB:"Team 12",scoreA:0,scoreB:3,date:"2026-03-10"},{teamA:"Team 15",teamB:"Team 11",scoreA:2,scoreB:1,date:"2026-03-10"},{teamA:"Team 16",teamB:"Team 10",scoreA:0,scoreB:0,date:"2026-03-10"},{teamA:"Team 2",teamB:"Team 9",scoreA:4,scoreB:0,date:"2026-03-10"},{teamA:"Team 3",teamB:"Team 8",scoreA:3,scoreB:1,date:"2026-03-10"}];
 
 function update(results){
     results.forEach(r=>{
@@ -258,7 +253,7 @@ function update(results){
     });
 }
 
-update(day1); update(day2); update(day3);
+update(day1); update(day2); update(day3); update(day4);
 
 function standings(){
     const table=document.getElementById("standings");
