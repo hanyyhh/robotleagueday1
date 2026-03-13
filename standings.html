@@ -236,6 +236,7 @@ const day1=[{teamA:"Team 1",teamB:"Team 16",scoreA:0,scoreB:4,date:"2026-03-07"}
 const day2=[{teamA:"Team 18",teamB:"Team 13",scoreA:0,scoreB:2,date:"2026-03-08"},{teamA:"Team 3",teamB:"Team 12",scoreA:0,scoreB:0,date:"2026-03-08"},{teamA:"Team 6",teamB:"Team 9",scoreA:1,scoreB:0,date:"2026-03-08"},{teamA:"Team 4",teamB:"Team 11",scoreA:4,scoreB:0,date:"2026-03-08"},{teamA:"Team 7",teamB:"Team 8",scoreA:3,scoreB:0,date:"2026-03-08"},{teamA:"Team 5",teamB:"Team 10",scoreA:4,scoreB:0,date:"2026-03-08"},{teamA:"Team 17",teamB:"Team 2",scoreA:0,scoreB:2,date:"2026-03-08"},{teamA:"Team 1",teamB:"Team 15",scoreA:4,scoreB:0,date:"2026-03-08"},{teamA:"Team 16",teamB:"Team 14",scoreA:1,scoreB:0,date:"2026-03-08"}];
 const day3=[{teamA:"Team 1",teamB:"Team 14",scoreA:0,scoreB:3,date:"2026-03-09"},{teamA:"Team 15",teamB:"Team 13",scoreA:1,scoreB:0,date:"2026-03-09"},{teamA:"Team 16",teamB:"Team 12",scoreA:0,scoreB:2,date:"2026-03-09"},{teamA:"Team 2",teamB:"Team 11",scoreA:4,scoreB:0,date:"2026-03-09"},{teamA:"Team 5",teamB:"Team 8",scoreA:1,scoreB:0,date:"2026-03-09"},{teamA:"Team 6",teamB:"Team 7",scoreA:0,scoreB:4,date:"2026-03-09"},{teamA:"Team 3",teamB:"Team 10",scoreA:4,scoreB:0,date:"2026-03-09"},{teamA:"Team 4",teamB:"Team 9",scoreA:0,scoreB:1,date:"2026-03-09"},{teamA:"Team 17",teamB:"Team 18",scoreA:1,scoreB:1,date:"2026-03-09"}];
 const day4=[{teamA:"Team 17",teamB:"Team 5",scoreA:0,scoreB:3,date:"2026-03-10"},{teamA:"Team 4",teamB:"Team 7",scoreA:1,scoreB:2,date:"2026-03-10"},{teamA:"Team 6",teamB:"Team 18",scoreA:3,scoreB:1,date:"2026-03-10"},{teamA:"Team 1",teamB:"Team 13",scoreA:1,scoreB:1,date:"2026-03-10"},{teamA:"Team 14",teamB:"Team 12",scoreA:0,scoreB:3,date:"2026-03-10"},{teamA:"Team 15",teamB:"Team 11",scoreA:2,scoreB:1,date:"2026-03-10"},{teamA:"Team 16",teamB:"Team 10",scoreA:0,scoreB:0,date:"2026-03-10"},{teamA:"Team 2",teamB:"Team 9",scoreA:4,scoreB:0,date:"2026-03-10"},{teamA:"Team 3",teamB:"Team 8",scoreA:3,scoreB:1,date:"2026-03-10"}];
+const day5=[{teamA:"Team 13",teamB:"Team 11",scoreA:3,scoreB:0,date:"2026-03-11"},{teamA:"Team 14",teamB:"Team 10",scoreA:2,scoreB:0,date:"2026-03-11"},{teamA:"Team 15",teamB:"Team 9",scoreA:1,scoreB:1,date:"2026-03-11"},{teamA:"Team 16",teamB:"Team 8",scoreA:3,scoreB:1,date:"2026-03-11"},{teamA:"Team 2",teamB:"Team 7",scoreA:3,scoreB:1,date:"2026-03-11"},{teamA:"Team 3",teamB:"Team 6",scoreA:2,scoreB:1,date:"2026-03-11"},{teamA:"Team 4",teamB:"Team 5",scoreA:2,scoreB:1,date:"2026-03-11"},{teamA:"Team 12",teamB:"Team 17",scoreA:4,scoreB:0,date:"2026-03-11"},{teamA:"Team 1",teamB:"Team 18",scoreA:2,scoreB:0,date:"2026-03-11"}];
 
 function update(results){
     results.forEach(r=>{
@@ -253,11 +254,17 @@ function update(results){
     });
 }
 
-update(day1); update(day2); update(day3); update(day4);
+// Order of execution is critical for history logs
+update(day1); 
+update(day2); 
+update(day3); 
+update(day4); 
+update(day5);
 
 function standings(){
     const table=document.getElementById("standings");
     table.innerHTML="";
+    // Sort by Points, then by Goal Difference
     teams.sort((a,b)=>b.points-a.points||b.gd-a.gd);
     teams.forEach((t,i)=>{
         const tr=document.createElement("tr");
